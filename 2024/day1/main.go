@@ -19,7 +19,10 @@ func main() {
 	slices.Sort(rightList)
 
 	totalDist := getTotalDist(leftList, rightList)
-	fmt.Println(totalDist)
+	fmt.Printf("total distance: %d\n", totalDist)
+
+	score := calculateSimilarityScore(leftList, rightList)
+	fmt.Printf("similarity score: %d\n", score)
 }
 
 func getLists() ([]int, []int) {
@@ -59,4 +62,18 @@ func getTotalDist(ll, rl []int) int {
 		totalDist += int(math.Abs(float64(ll[i] - rl[i])))
 	}
 	return totalDist
+}
+
+func calculateSimilarityScore(leftList, rightList []int) int {
+	score := 0
+	for _, left := range leftList {
+		count := 0
+		for _, right := range rightList {
+			if left == right {
+				count++
+			}
+		}
+		score += left * count
+	}
+	return score
 }
