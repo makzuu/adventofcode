@@ -5,6 +5,8 @@ import (
 	"log"
 	"bufio"
 	"fmt"
+	"io"
+	"errors"
 )
 
 func main() {
@@ -17,6 +19,8 @@ func main() {
 	r := bufio.NewReader(f)
 
 	floor := 0
+	characterPosition := 0
+	curPosition := 1
 
 	b, err := r.ReadByte()
 	for err == nil {
@@ -28,9 +32,17 @@ func main() {
 			log.Printf("bad character: %q", b)
 		}
 
+		if characterPosition == 0 && floor == -1 {
+			characterPosition = curPosition
+		}
+
 		b, err = r.ReadByte()
+		curPosition++
 	}
 	fmt.Printf("floor: %v\n", floor)
+	fmt.Printf("position: %v\n", characterPosition)
 
-	log.Fatalf("error while reading bytes: %v", err)
+	if !errors.Is(err, io.EOF) {
+		log.Printf("error while reading bytes: %v", err)
+	}
 }
